@@ -1,0 +1,38 @@
+model {
+    buildConfigs {
+        winx86(BuildConfig) {
+            architecture = 'x86'
+            operatingSystem = 'windows'
+            compilerArgs = [
+                '/EHsc',
+                '/DNOMINMAX',
+                '/D_SCL_SECURE_NO_WARNINGS',
+                '/D_WINSOCK_DEPRECATED_NO_WARNINGS'
+            ]
+            crossCompile = false
+            compilerFamily = 'VisualCpp'
+        }
+        winx64(BuildConfig) {
+            architecture = 'x86-64'
+            operatingSystem = 'windows'
+            compilerArgs = [
+                '/EHsc',
+                '/DNOMINMAX',
+                '/D_SCL_SECURE_NO_WARNINGS',
+                '/D_WINSOCK_DEPRECATED_NO_WARNINGS'
+            ]
+            crossCompile = false
+            compilerFamily = 'VisualCpp'
+        }
+        roboRio(BuildConfig) {
+            architecture = 'arm-v7'
+            operatingSystem = 'linux'
+            toolChainPrefix = 'arm-frc-linux-gnueabi-'
+            compilerArgs << '-std=c++11' << '-Wformat=2' << '-Wall' << '-Wextra' << '-Werror' << '-pedantic' << '-Wno-psabi' << '-Wno-unused-parameter' << '-fPIC' << '-rdynamic' << '-Wno-error=deprecated-declarations' << '-pthread'
+            linkerArgs << '-rdynamic' << '-pthread'
+            crossCompile = true
+            compilerFamily = 'Gcc'
+            exclude << 'gmock'
+        }
+    }
+}
