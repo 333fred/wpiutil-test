@@ -5,6 +5,8 @@ def windowsLinkerArgs = ['/DEBUG']
 def linuxCompilerArgs = ['-std=c++11', '-Wformat=2', '-Wall', '-Wextra', '-Werror', '-pedantic', '-Wno-psabi', '-g',
                          '-Wno-unused-parameter', '-fPIC', '-rdynamic', '-Wno-error=deprecated-declarations', '-pthread']
 def linuxLinkerArgs = ['-rdynamic', '-pthread']
+def rioCompilerArgs = ['-std=c++1y', '-Wformat=2', '-Wall', '-Wextra', '-Werror', '-pedantic', '-Wno-psabi', '-g',
+                         '-Wno-unused-parameter', '-fPIC', '-rdynamic', '-Wno-error=deprecated-declarations', '-pthread']
 
 model {
     buildConfigs {
@@ -62,7 +64,7 @@ model {
             architecture = 'arm-v7'
             operatingSystem = 'linux'
             toolChainPrefix = 'arm-frc-linux-gnueabi-'
-            compilerArgs = linuxCompilerArgs
+            compilerArgs = rioCompilerArgs
             linkerArgs = linuxLinkerArgs
             crossCompile = true
             compilerFamily = 'Gcc'
