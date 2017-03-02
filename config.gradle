@@ -1,7 +1,6 @@
 import edu.wpi.first.nativeutils.*
 
 def windowsCompilerArgs = ['/EHsc', '/DNOMINMAX', '/D_SCL_SECURE_NO_WARNINGS', '/D_WINSOCK_DEPRECATED_NO_WARNINGS', '/Zi', '/FS']
-def windowsLinkerArgs = ['/DEBUG']
 def linuxCompilerArgs = ['-std=c++11', '-Wformat=2', '-Wall', '-Wextra', '-Werror', '-pedantic', '-Wno-psabi', '-g',
                          '-Wno-unused-parameter', '-fPIC', '-rdynamic', '-Wno-error=deprecated-declarations', '-pthread']
 def linuxLinkerArgs = ['-rdynamic', '-pthread']
@@ -14,7 +13,8 @@ model {
             architecture = 'x86'
             operatingSystem = 'windows'
             compilerArgs = windowsCompilerArgs
-            linkerArgs = windowsLinkerArgs
+            debugLinkerArgs = ['/DEBUG']
+            releaseCompilerArgs = ['/O2']
             crossCompile = false
             compilerFamily = 'VisualCpp'
         }
@@ -22,7 +22,6 @@ model {
             architecture = 'x86-64'
             operatingSystem = 'windows'
             compilerArgs = windowsCompilerArgs
-            linkerArgs = windowsLinkerArgs
             crossCompile = false
             compilerFamily = 'VisualCpp'
         }
