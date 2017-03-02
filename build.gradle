@@ -1,7 +1,16 @@
+buildscript {
+    repositories {
+        mavenLocal()
+    }
+    dependencies {
+        classpath 'edu.wpi.first:native-utils:0.1-SNAPSHOT'
+    }
+}
+
 apply plugin: 'cpp'
 apply plugin: 'google-test'
 apply plugin: 'visual-studio'
-apply plugin: BuildConfigRules
+apply plugin: 'edu.wpi.first.native-utils'
 
 apply from: 'config.gradle'
 
@@ -13,12 +22,6 @@ model {
         withType(GoogleTestTestSuiteBinarySpec) {
             lib project: ':gmock', library: 'gmock', linkage: 'static'
             lib library: 'wpiutil', linkage: 'static'
-            if (targetPlatform.operatingSystem.windows) {
-                cppCompiler.args '/EHsc', '/DNOMINMAX', '/D_SCL_SECURE_NO_WARNINGS', '/D_WINSOCK_DEPRECATED_NO_WARNINGS'
-            } else {
-                cppCompiler.args '-pthread', '-std=c++11'
-                linker.args '-pthread'
-            }
         }
     }
 }

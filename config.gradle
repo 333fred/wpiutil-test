@@ -1,35 +1,69 @@
+import edu.wpi.first.nativeutils.*
+
+def windowsCompilerArgs = ['/EHsc', '/DNOMINMAX', '/D_SCL_SECURE_NO_WARNINGS', '/D_WINSOCK_DEPRECATED_NO_WARNINGS', '/Zi', '/FS']
+def windowsLinkerArgs = ['/DEBUG']
+def linuxCompilerArgs = ['-std=c++11', '-Wformat=2', '-Wall', '-Wextra', '-Werror', '-pedantic', '-Wno-psabi', '-g',
+                         '-Wno-unused-parameter', '-fPIC', '-rdynamic', '-Wno-error=deprecated-declarations', '-pthread']
+def linuxLinkerArgs = ['-rdynamic', '-pthread']
+
 model {
     buildConfigs {
-        winx86(BuildConfig) {
+        winX86(BuildConfig) {
             architecture = 'x86'
             operatingSystem = 'windows'
-            compilerArgs = [
-                '/EHsc',
-                '/DNOMINMAX',
-                '/D_SCL_SECURE_NO_WARNINGS',
-                '/D_WINSOCK_DEPRECATED_NO_WARNINGS'
-            ]
+            compilerArgs = windowsCompilerArgs
+            linkerArgs = windowsLinkerArgs
             crossCompile = false
             compilerFamily = 'VisualCpp'
         }
-        winx64(BuildConfig) {
+        winX64(BuildConfig) {
             architecture = 'x86-64'
             operatingSystem = 'windows'
-            compilerArgs = [
-                '/EHsc',
-                '/DNOMINMAX',
-                '/D_SCL_SECURE_NO_WARNINGS',
-                '/D_WINSOCK_DEPRECATED_NO_WARNINGS'
-            ]
+            compilerArgs = windowsCompilerArgs
+            linkerArgs = windowsLinkerArgs
             crossCompile = false
             compilerFamily = 'VisualCpp'
+        }
+        linuxX86(BuildConfig) {
+            architecture = 'x86'
+            operatingSystem = 'linux'
+            compilerArgs = linuxCompilerArgs
+            linkerArgs = linuxLinkerArgs
+            crossCompile = false
+            compilerFamily = 'Gcc'
+        }
+        linuxX64(BuildConfig) {
+            architecture = 'x86-64'
+            operatingSystem = 'linux'
+            compilerArgs = linuxCompilerArgs
+            linkerArgs = linuxLinkerArgs
+            crossCompile = false
+            compilerFamily = 'Gcc'
+        }
+        macX86(BuildConfig) {
+            architecture = 'x86'
+            operatingSystem = 'osx'
+            compilerArgs = ['-std=c++11', '-Wall', '-Wextra', '-Werror', '-pedantic-errors', '-fPIC', '-g', '-m32',
+                            '-Wno-unused-parameter', '-Wno-missing-field-initializers', '-Wno-unused-private-field']
+            linkerArgs = linuxLinkerArgs
+            crossCompile = false
+            compilerFamily = 'Clang'
+        }
+        macX64(BuildConfig) {
+            architecture = 'x86-64'
+            operatingSystem = 'osx'
+            compilerArgs = ['-std=c++11', '-Wall', '-Wextra', '-Werror', '-pedantic-errors', '-fPIC', '-g',
+                            '-Wno-unused-parameter', '-Wno-missing-field-initializers', '-Wno-unused-private-field']
+            linkerArgs = linuxLinkerArgs
+            crossCompile = false
+            compilerFamily = 'Clang'
         }
         roboRio(BuildConfig) {
             architecture = 'arm-v7'
             operatingSystem = 'linux'
             toolChainPrefix = 'arm-frc-linux-gnueabi-'
-            compilerArgs << '-std=c++11' << '-Wformat=2' << '-Wall' << '-Wextra' << '-Werror' << '-pedantic' << '-Wno-psabi' << '-Wno-unused-parameter' << '-fPIC' << '-rdynamic' << '-Wno-error=deprecated-declarations' << '-pthread'
-            linkerArgs << '-rdynamic' << '-pthread'
+            compilerArgs = linuxCompilerArgs
+            linkerArgs = linuxLinkerArgs
             crossCompile = true
             compilerFamily = 'Gcc'
             exclude << 'gmock'

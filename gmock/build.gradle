@@ -1,8 +1,17 @@
+buildscript {
+    repositories {
+        mavenLocal()
+    }
+    dependencies {
+        classpath 'edu.wpi.first:native-utils:0.1-SNAPSHOT'
+    }
+}
+
 import org.gradle.internal.os.OperatingSystem
 
 apply plugin: 'cpp'
 apply plugin: 'visual-studio'
-apply plugin: BuildConfigRules
+apply plugin: 'edu.wpi.first.native-utils'
 
 apply from: '../config.gradle'
 
