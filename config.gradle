@@ -22,6 +22,8 @@ model {
             architecture = 'x86-64'
             operatingSystem = 'windows'
             compilerArgs = windowsCompilerArgs
+            debugLinkerArgs = ['/DEBUG']
+            releaseCompilerArgs = ['/O2']
             crossCompile = false
             compilerFamily = 'VisualCpp'
         }
@@ -60,7 +62,7 @@ model {
             compilerFamily = 'Clang'
         }
         roboRio(BuildConfig) {
-            architecture = 'arm-v7'
+            architecture = 'athena'
             operatingSystem = 'linux'
             toolChainPrefix = 'arm-frc-linux-gnueabi-'
             compilerArgs = rioCompilerArgs
@@ -68,6 +70,44 @@ model {
             crossCompile = true
             compilerFamily = 'Gcc'
             exclude << 'gmock'
+        }
+        raspbian(BuildConfig) {
+            architecture = 'raspbian'
+            operatingSystem = 'linux'
+            toolChainPrefix = 'arm-linux-gnueabi-'
+            compilerArgs = rioCompilerArgs
+            linkerArgs = linuxLinkerArgs
+            crossCompile = true
+            compilerFamily = 'Gcc'
+            exclude << 'gmock'
+        }
+        armhf(BuildConfig) {
+            architecture = 'armhf'
+            operatingSystem = 'linux'
+            toolChainPrefix = 'arm-linux-gnueabi-'
+            compilerArgs = rioCompilerArgs
+            linkerArgs = linuxLinkerArgs
+            crossCompile = true
+            compilerFamily = 'Gcc'
+            exclude << 'gmock'
+        }
+        armv8(BuildConfig) {
+            architecture = 'armv8'
+            operatingSystem = 'linux'
+            toolChainPrefix = 'aarch-linux-gnu-'
+            compilerArgs = rioCompilerArgs
+            linkerArgs = linuxLinkerArgs
+            crossCompile = true
+            compilerFamily = 'Gcc'
+            exclude << 'gmock'
+        }
+        linuxArm(BuildConfig) {
+            architecture = 'arm'
+            operatingSystem = 'linux'
+            compilerArgs = rioCompilerArgs
+            linkerArgs = linuxLinkerArgs
+            crossCompile = false
+            compilerFamily = 'Gcc'
         }
     }
 }
