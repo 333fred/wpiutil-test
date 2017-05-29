@@ -107,6 +107,7 @@ model {
             compilerArgs = rioCompilerArgs
             linkerArgs = linuxLinkerArgs
             crossCompile = false
+            isArm = true
             compilerFamily = 'Gcc'
         }
     }
