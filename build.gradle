@@ -25,3 +25,5 @@ model {
         }
     }
 }
+
+apply from: 'publish.gradle'

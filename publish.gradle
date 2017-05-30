@@ -1,0 +1,39 @@
+apply plugin: 'maven-publish'
+
+def baseArtifactId = 'wpiutil'
+
+publishing {
+  publications {
+    cpp(MavenPublication) {
+      project.tasks.each { task ->
+        if (task.name.startsWith('zip') && !task.name.contains('jni')) {
+          artifact (task) {
+            if (task.name.contains('debug')) {
+              classifier = task.classifier + 'debug'
+            }
+          }
+        }
+      }
+
+      artifactId = baseArtifactId + '-cpp'
+      groupId 'edu.wpi.first.wpiutil'
+      version '0.1-SNAPSHOT'
+    }
+
+    jni(MavenPublication) {
+      project.tasks.each { task ->
+        if (task.name.startsWith('zip') && task.name.contains('jni')) {
+          artifact (task) {
+            if (task.name.contains('debug')) {
+              classifier = task.classifier + 'debug'
+            }
+          }
+        }
+      }
+
+      artifactId = baseArtifactId + '-jni'
+      groupId 'edu.wpi.first.wpiutil'
+      version '0.1-SNAPSHOT'
+    }
+  }
+}
