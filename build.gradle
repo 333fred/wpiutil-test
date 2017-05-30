@@ -14,6 +14,10 @@ apply plugin: 'edu.wpi.first.native-utils'
 
 apply from: 'config.gradle'
 
+ext.getJniSymbols = {
+    return [ "ConvertUTF16toUTF32" ]
+}
+
 model {
     components {
         wpiutil(NativeLibrarySpec)
