@@ -15,6 +15,9 @@ publishing {
         }
       }
 
+      artifact cppHeadersZip
+      artifact cppSourcesZip
+
       artifactId = baseArtifactId + '-cpp'
       groupId 'edu.wpi.first.wpiutil'
       version '0.1-SNAPSHOT'
@@ -32,6 +35,16 @@ publishing {
       }
 
       artifactId = baseArtifactId + '-jni'
+      groupId 'edu.wpi.first.wpiutil'
+      version '0.1-SNAPSHOT'
+    }
+
+    java(MavenPublication) {
+      artifact jar
+      artifact sourcesJar
+      artifact javadocJar
+
+      artifactId = baseArtifactId + '-java'
       groupId 'edu.wpi.first.wpiutil'
       version '0.1-SNAPSHOT'
     }
