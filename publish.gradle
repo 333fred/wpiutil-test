@@ -33,11 +33,7 @@ publishing {
     cpp(MavenPublication) {
       project.tasks.each { task ->
         if (task.name.startsWith('zip') && !task.name.contains('jni')) {
-          artifact (task) {
-            if (task.name.contains('debug')) {
-              classifier = task.classifier + 'debug'
-            }
-          }
+          artifact (task)
         }
       }
 
@@ -54,11 +50,7 @@ publishing {
     jni(MavenPublication) {
       project.tasks.each { task ->
         if (task.name.startsWith('zip') && task.name.contains('jni')) {
-          artifact (task) {
-            if (task.name.contains('debug')) {
-              classifier = task.classifier + 'debug'
-            }
-          }
+          artifact (task)
         }
       }
 
