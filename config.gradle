@@ -1,11 +1,21 @@
 import edu.wpi.first.nativeutils.*
 
 def windowsCompilerArgs = ['/EHsc', '/DNOMINMAX', '/D_SCL_SECURE_NO_WARNINGS', '/D_WINSOCK_DEPRECATED_NO_WARNINGS', '/Zi', '/FS']
+def windowsReleaseCompilerArgs = ['/O2']
+def windowsDebugLinkerArgs = ['/DEBUG']
+
 def linuxCompilerArgs = ['-std=c++11', '-Wformat=2', '-Wall', '-Wextra', '-Werror', '-pedantic', '-Wno-psabi', '-g',
                          '-Wno-unused-parameter', '-fPIC', '-rdynamic', '-Wno-error=deprecated-declarations', '-pthread']
 def linuxLinkerArgs = ['-rdynamic', '-pthread']
-def rioCompilerArgs = ['-std=c++1y', '-Wformat=2', '-Wall', '-Wextra', '-Werror', '-pedantic', '-Wno-psabi', '-g',
-                         '-Wno-unused-parameter', '-fPIC', '-rdynamic', '-Wno-error=deprecated-declarations', '-pthread']
+def linuxReleaseCompilerArgs = ['-O2']
+def linuxDebugCompilerArgs = ['-O0']
+def linux32BitArg = '-m32'
+
+def macCompilerArgs =  ['-std=c++11', '-Wall', '-Wextra', '-Werror', '-pedantic-errors', '-fPIC', '-g',
+                            '-Wno-unused-parameter', '-Wno-missing-field-initializers', '-Wno-unused-private-field']
+def macReleaseCompilerArgs = ['-O2']
+def macDebugCompilerArgs = ['-O0']
+def mac32BitArg = '-m32'
 
 model {
     buildConfigs {
@@ -13,8 +23,8 @@ model {
             architecture = 'x86'
             operatingSystem = 'windows'
             compilerArgs = windowsCompilerArgs
-            debugLinkerArgs = ['/DEBUG']
-            releaseCompilerArgs = ['/O2']
+            debugLinkerArgs = windowsDebugLinkerArgs
+            releaseCompilerArgs = windowsReleaseCompilerArgs
             crossCompile = false
             compilerFamily = 'VisualCpp'
         }
@@ -22,8 +32,8 @@ model {
             architecture = 'x86-64'
             operatingSystem = 'windows'
             compilerArgs = windowsCompilerArgs
-            debugLinkerArgs = ['/DEBUG']
-            releaseCompilerArgs = ['/O2']
+            debugLinkerArgs = windowsDebugLinkerArgs
+            releaseCompilerArgs = windowsReleaseCompilerArgs
             crossCompile = false
             compilerFamily = 'VisualCpp'
         }
@@ -31,7 +41,11 @@ model {
             architecture = 'x86'
             operatingSystem = 'linux'
             compilerArgs = linuxCompilerArgs
+            compilerArgs << linux32BitArg
             linkerArgs = linuxLinkerArgs
+            linkerArgs << linux32BitArg
+            debugCompilerArgs = linuxDebugCompilerArgs
+            releaseCompilerArgs = linuxReleaseCompilerArgs
             crossCompile = false
             compilerFamily = 'Gcc'
         }
@@ -40,24 +54,28 @@ model {
             operatingSystem = 'linux'
             compilerArgs = linuxCompilerArgs
             linkerArgs = linuxLinkerArgs
+            debugCompilerArgs = linuxDebugCompilerArgs
+            releaseCompilerArgs = linuxReleaseCompilerArgs
             crossCompile = false
             compilerFamily = 'Gcc'
         }
         macX86(BuildConfig) {
             architecture = 'x86'
             operatingSystem = 'osx'
-            compilerArgs = ['-std=c++11', '-Wall', '-Wextra', '-Werror', '-pedantic-errors', '-fPIC', '-g', '-m32',
-                            '-Wno-unused-parameter', '-Wno-missing-field-initializers', '-Wno-unused-private-field']
-            linkerArgs = linuxLinkerArgs
+            compilerArgs = macCompilerArgs
+            compilerArgs << mac32BitArg
+            linkerArgs << mac32BitArg
+            debugCompilerArgs = macDebugCompilerArgs
+            releaseCompilerArgs = macReleaseCompilerArgs
             crossCompile = false
             compilerFamily = 'Clang'
         }
         macX64(BuildConfig) {
             architecture = 'x86-64'
             operatingSystem = 'osx'
-            compilerArgs = ['-std=c++11', '-Wall', '-Wextra', '-Werror', '-pedantic-errors', '-fPIC', '-g',
-                            '-Wno-unused-parameter', '-Wno-missing-field-initializers', '-Wno-unused-private-field']
-            linkerArgs = linuxLinkerArgs
+            compilerArgs = macCompilerArgs
+            debugCompilerArgs = macDebugCompilerArgs
+            releaseCompilerArgs = macReleaseCompilerArgs
             crossCompile = false
             compilerFamily = 'Clang'
         }
@@ -65,7 +83,7 @@ model {
             architecture = 'athena'
             operatingSystem = 'linux'
             toolChainPrefix = 'arm-frc-linux-gnueabi-'
-            compilerArgs = rioCompilerArgs
+            compilerArgs = linuxCompilerArgs
             linkerArgs = linuxLinkerArgs
             crossCompile = true
             compilerFamily = 'Gcc'
@@ -75,7 +93,7 @@ model {
             architecture = 'raspbian'
             operatingSystem = 'linux'
             toolChainPrefix = 'arm-linux-gnueabi-'
-            compilerArgs = rioCompilerArgs
+            compilerArgs = linuxCompilerArgs
             linkerArgs = linuxLinkerArgs
             crossCompile = true
             compilerFamily = 'Gcc'
@@ -85,7 +103,7 @@ model {
             architecture = 'armhf'
             operatingSystem = 'linux'
             toolChainPrefix = 'arm-linux-gnueabi-'
-            compilerArgs = rioCompilerArgs
+            compilerArgs = linuxCompilerArgs
             linkerArgs = linuxLinkerArgs
             crossCompile = true
             compilerFamily = 'Gcc'
@@ -95,7 +113,7 @@ model {
             architecture = 'armv8'
             operatingSystem = 'linux'
             toolChainPrefix = 'aarch-linux-gnu-'
-            compilerArgs = rioCompilerArgs
+            compilerArgs = linuxCompilerArgs
             linkerArgs = linuxLinkerArgs
             crossCompile = true
             compilerFamily = 'Gcc'
@@ -104,7 +122,7 @@ model {
         linuxArm(BuildConfig) {
             architecture = 'arm'
             operatingSystem = 'linux'
-            compilerArgs = rioCompilerArgs
+            compilerArgs = linuxCompilerArgs
             linkerArgs = linuxLinkerArgs
             crossCompile = false
             isArm = true
