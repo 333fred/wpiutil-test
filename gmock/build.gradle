@@ -13,6 +13,8 @@ apply plugin: 'cpp'
 apply plugin: 'visual-studio'
 apply plugin: 'edu.wpi.first.native-utils'
 
+ext.gmockProject = true
+
 apply from: '../config.gradle'
 
 model {
@@ -36,6 +38,9 @@ model {
                 } else {
                     cppCompiler.args '-Wall', '-Wshadow', '-fexceptions', '-Wextra', '-Wno-unused-parameter', '-Wno-missing-field-initializers', '-pthread', '-fPIC'
                 }
+            }
+            binaries.withType(SharedLibraryBinarySpec) {
+                buildable = false
             }
         }
     }
