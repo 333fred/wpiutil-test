@@ -21,10 +21,6 @@ if (project.hasProperty("publishVersion")) {
     pubVersion = WPILibVersion.version
 }
 
-if (pubVersion == null || pubVersion == "") {
-  pubVersion = "0.2.0-SNAPSHOT"
-}
-
 def baseArtifactId = 'wpiutil'
 def artifactGroupId = 'edu.wpi.first.wpiutil'
 
@@ -33,7 +29,7 @@ model {
         cpp(PublishingConfig) {
             extraPublishingTasks = [ cppHeadersZip, cppSourcesZip ]
             isNative = true
-            artifactId = 'wpiutil-cpp'
+            artifactId = "${baseArtifactId}-cpp"
             groupId = artifactGroupId
             version = pubVersion
         }
@@ -47,7 +43,7 @@ publishing {
       artifact sourcesJar
       artifact javadocJar
 
-      artifactId = baseArtifactId + '-java'
+      artifactId = "${baseArtifactId}-java"
       groupId artifactGroupId
       version pubVersion
     }

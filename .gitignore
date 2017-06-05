@@ -14,6 +14,11 @@
 *.dylib
 *.dll
 
+*.vcxproj
+*.sln
+*.vcxproj.filters
+
+
 # Compiled Static libraries
 *.lai
 *.la
