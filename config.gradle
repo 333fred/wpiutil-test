@@ -17,6 +17,23 @@ def macReleaseCompilerArgs = ['-O2']
 def macDebugCompilerArgs = ['-O0']
 def mac32BitArg = '-m32'
 
+/*
+model {
+    dependencyConfigs {
+        wpiutil(DependencyConfig) {
+            groupId = 'edu.wpi.first.wpiutil'
+            artifactId = 'wpiutil-cpp'
+            headerClassifier = 'headers'
+            ext = 'zip'
+            version = '+'
+            sharedConfigs = [ ntcore: [ 'linuxX86', 'linuxX64' ], wpiutil: [ 'windows:x86', 'linux:x86-64' ] ]
+            staticConfigs = [ ntcore: [ 'windows:x86', 'windows:x86-64' ], wpiutil: [ 'windows:x86', 'linux:x86-64' ] ]
+        }
+    }
+}
+*/
+
+
 model {
     buildConfigs {
         winX86(BuildConfig) {
@@ -87,6 +104,7 @@ model {
             linkerArgs = linuxLinkerArgs
             debugCompilerArgs = linuxDebugCompilerArgs
             releaseCompilerArgs = linuxReleaseCompilerArgs
+            releaseStripBinaries = true
             crossCompile = true
             compilerFamily = 'Gcc'
             exclude << 'gmock'

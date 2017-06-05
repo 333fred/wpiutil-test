@@ -22,45 +22,26 @@ if (project.hasProperty("publishVersion")) {
 }
 
 if (pubVersion == null || pubVersion == "") {
-  pubVersion = "0.1.0-SNAPSHOT"
+  pubVersion = "0.2.0-SNAPSHOT"
 }
 
 def baseArtifactId = 'wpiutil'
 def artifactGroupId = 'edu.wpi.first.wpiutil'
 
+model {
+  publishingConfigs {
+        cpp(PublishingConfig) {
+            extraPublishingTasks = [ cppHeadersZip, cppSourcesZip ]
+            isNative = true
+            artifactId = 'wpiutil-cpp'
+            groupId = artifactGroupId
+            version = pubVersion
+        }
+    }
+}
+
 publishing {
   publications {
-    cpp(MavenPublication) {
-      project.tasks.each { task ->
-        if (task.name.startsWith('zip') && !task.name.contains('jni')) {
-          artifact (task)
-        }
-      }
-
-      artifact cppHeadersZip
-      artifact cppSourcesZip
-
-      artifactId = baseArtifactId + '-cpp'
-      groupId artifactGroupId
-      version pubVersion
-    }
-
-    /*
-
-    jni(MavenPublication) {
-      project.tasks.each { task ->
-        if (task.name.startsWith('zip') && task.name.contains('jni')) {
-          artifact (task)
-        }
-      }
-
-      artifactId = baseArtifactId + '-jni'
-      groupId artifactGroupId
-      version pubVersion
-    }
-
-    */
-
     java(MavenPublication) {
       artifact jar
       artifact sourcesJar

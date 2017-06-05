@@ -15,21 +15,12 @@ apply plugin: 'cpp'
 apply plugin: 'google-test'
 apply plugin: 'visual-studio'
 apply plugin: 'edu.wpi.first.native-utils'
+
+apply plugin: 'edu.wpi.first.dependency-utils'
+apply plugin: 'edu.wpi.first.publish-utils'
 apply plugin: 'java'
 
 apply from: 'config.gradle'
-
-model {
-    components {
-        wpiutil(NativeLibrarySpec)
-    }
-    binaries {
-        withType(GoogleTestTestSuiteBinarySpec) {
-            lib project: ':gmock', library: 'gmock', linkage: 'static'
-            lib library: 'wpiutil', linkage: 'static'
-        }
-    }
-}
 
 task cppSourcesZip(type: Zip) {
     destinationDir = project.buildDir
@@ -48,6 +39,20 @@ task cppHeadersZip(type: Zip) {
         into '/'
     }
 }
+
+
+model {
+    components {
+        wpiutil(NativeLibrarySpec)
+    }
+    binaries {
+        withType(GoogleTestTestSuiteBinarySpec) {
+            lib project: ':gmock', library: 'gmock', linkage: 'static'
+            lib library: 'wpiutil', linkage: 'static'
+        }
+    }
+}
+
 
 task sourcesJar(type: Jar, dependsOn: classes) {
     classifier = 'sources'
