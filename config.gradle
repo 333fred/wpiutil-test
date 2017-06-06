@@ -1,4 +1,6 @@
 import edu.wpi.first.nativeutils.*
+import org.gradle.internal.os.OperatingSystem
+
 
 def windowsCompilerArgs = ['/EHsc', '/DNOMINMAX', '/D_SCL_SECURE_NO_WARNINGS', '/D_WINSOCK_DEPRECATED_NO_WARNINGS', '/Zi', '/FS']
 def windowsReleaseCompilerArgs = ['/O2']
@@ -17,6 +19,26 @@ def macReleaseCompilerArgs = ['-O2']
 def macDebugCompilerArgs = ['-O0']
 def mac32BitArg = '-m32'
 
+def windowsPlatformDetect = { config->
+    return OperatingSystem.current().isWindows()
+}
+
+def linuxIntelPlatformDetect = { config->
+    def arch = System.getProperty("os.arch")
+    def isIntel = (arch == 'amd64' || arch == 'i386')
+    return OperatingSystem.current().isLinux() && isIntel
+}
+
+def linuxArmPlatformDetect = { config->
+    def arch = System.getProperty("os.arch")
+    def isIntel = (arch == 'amd64' || arch == 'i386')
+    return OperatingSystem.current().isLinux() && !isIntel
+}
+
+def macPlatformDetect = { config->
+    return OperatingSystem.current().isMacOsX()
+}
+
 model {
     buildConfigs {
         winX86(BuildConfig) {
@@ -27,6 +49,7 @@ model {
             releaseCompilerArgs = windowsReleaseCompilerArgs
             crossCompile = false
             compilerFamily = 'VisualCpp'
+            detectPlatform = windowsPlatformDetect
         }
         winX64(BuildConfig) {
             architecture = 'x86-64'
@@ -36,6 +59,7 @@ model {
             releaseCompilerArgs = windowsReleaseCompilerArgs
             crossCompile = false
             compilerFamily = 'VisualCpp'
+            detectPlatform = windowsPlatformDetect
         }
         linuxX86(BuildConfig) {
             architecture = 'x86'
@@ -48,6 +72,7 @@ model {
             releaseCompilerArgs = linuxReleaseCompilerArgs
             crossCompile = false
             compilerFamily = 'Gcc'
+            detectPlatform = linuxIntelPlatformDetect
         }
         linuxX64(BuildConfig) {
             architecture = 'x86-64'
@@ -58,6 +83,7 @@ model {
             releaseCompilerArgs = linuxReleaseCompilerArgs
             crossCompile = false
             compilerFamily = 'Gcc'
+            detectPlatform = linuxIntelPlatformDetect
         }
         macX86(BuildConfig) {
             architecture = 'x86'
@@ -69,6 +95,7 @@ model {
             releaseCompilerArgs = macReleaseCompilerArgs
             crossCompile = false
             compilerFamily = 'Clang'
+            detectPlatform = macPlatformDetect
         }
         macX64(BuildConfig) {
             architecture = 'x86-64'
@@ -78,6 +105,7 @@ model {
             releaseCompilerArgs = macReleaseCompilerArgs
             crossCompile = false
             compilerFamily = 'Clang'
+            detectPlatform = macPlatformDetect
         }
         roboRio(BuildConfig) {
             architecture = 'athena'
@@ -128,6 +156,17 @@ model {
             compilerFamily = 'Gcc'
             exclude << 'gmock'
         }
+        raspbianNative(BuildConfig) {
+            architecture = 'raspbian'
+            operatingSystem = 'linux'
+            compilerArgs = linuxCompilerArgs
+            linkerArgs = linuxLinkerArgs
+            debugCompilerArgs = linuxDebugCompilerArgs
+            releaseCompilerArgs = linuxReleaseCompilerArgs
+            crossCompile = false
+            compilerFamily = 'Gcc'
+            detectPlatform = linuxArmPlatformDetect
+        }
         linuxArm(BuildConfig) {
             architecture = 'arm'
             operatingSystem = 'linux'
@@ -138,6 +177,7 @@ model {
             crossCompile = false
             isArm = true
             compilerFamily = 'Gcc'
+            detectPlatform = linuxArmPlatformDetect
         }
     }
 }
