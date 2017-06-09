@@ -25,17 +25,20 @@ apply from: 'config.gradle'
 
 model {
     exportsConfigs {
-        wpiutil(ExportsConfig) { }
+        wpiutil(ExportsConfig) { 
+            x86ExcludeSymbols = [ '_CT??_R0?AV_System_error', '_CT??_R0?AVexception', '_CT??_R0?AVfailure', 
+                                  '_CT??_R0?AVruntime_error', '_CT??_R0?AVsystem_error', '_CTA5?AVfailure',
+                                  '_TI5?AVfailure' ]
+            x64ExcludeSymbols = [ '_CT??_R0?AV_System_error', '_CT??_R0?AVexception', '_CT??_R0?AVfailure', 
+                                  '_CT??_R0?AVruntime_error', '_CT??_R0?AVsystem_error', '_CTA5?AVfailure',
+                                  '_TI5?AVfailure' ]
+        }
     }
 }
 
 model {
     components {
         wpiutil(NativeLibrarySpec) {
-            binaries.all {
-                it.linker.args '/INCREMENTAL:NO', '/SUBSYSTEM:CONSOLE', '/TLBID:1', '/DYNAMICBASE', '/NXCOMPAT', '/MACHINE:X86', '/SAFESEH', '/machine:x86'
-                //it.linker.args 'OLDNAMES.lib', '/MACHINE:X86', '/NXCOMPAT', 'kernel32.lib', 'user32.lib', 'gdi32.lib', 'winspool.lib', 'shell32.lib', 'ole32.lib', 'oleaut32.lib', 'uuid.lib', 'comdlg32.lib', 'advapi32.lib', '/DYNAMICBASE', 'libucrt.lib', 'libcmt.lib', 'libvcruntime.lib', 'LIBCPMT.LIB', '/SAFESEH', '/VERBOSE'
-            }
         }
     }
     binaries {

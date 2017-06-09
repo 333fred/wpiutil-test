@@ -21,6 +21,10 @@ if (project.hasProperty("publishVersion")) {
     pubVersion = WPILibVersion.version
 }
 
+if (pubVersion == '') {
+    pubVersion = '424242-SNAPSHOT'
+}
+
 def baseArtifactId = 'wpiutil'
 def artifactGroupId = 'edu.wpi.first.wpiutil'
 
