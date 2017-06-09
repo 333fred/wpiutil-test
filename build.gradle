@@ -44,7 +44,7 @@ model {
     binaries {
         withType(GoogleTestTestSuiteBinarySpec) {
             lib project: ':gmock', library: 'gmock', linkage: 'static'
-            lib library: 'wpiutil', linkage: 'static'
+            lib library: 'wpiutil', linkage: 'shared'
         }
     }
 }
