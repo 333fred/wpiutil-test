@@ -2,9 +2,14 @@ import edu.wpi.first.nativeutils.*
 import org.gradle.internal.os.OperatingSystem
 
 
-def windowsCompilerArgs = ['/EHsc', '/DNOMINMAX', '/D_SCL_SECURE_NO_WARNINGS', '/D_WINSOCK_DEPRECATED_NO_WARNINGS', '/Zi', '/FS']
-def windowsReleaseCompilerArgs = ['/O2']
-def windowsDebugLinkerArgs = ['/DEBUG']
+def windowsCompilerArgs = [ '/Zi', '/W3', '/WX-', '/O2', '/Ob2', '/Oy-', '/D WIN32', '/D NOMINMAX', '/D _SCL_SECURE_NO_WARNINGS', '/D _WINSOCK_DEPRECATED_NO_WARNINGS', '/D _WINDLL', '/D _MBCS', '/Gm-', '/EHsc', '/MT', '/GS', '/fp:precise', '/Zc:wchar_t', '/Zc:forScope', '/Zc:inline', '/GR', '/Gd', '/TP', '/analyze-', '/errorReport:prompt', '/FS']
+
+
+
+//['/EHsc', '/DNOMINMAX', '/D_SCL_SECURE_NO_WARNINGS', '/D_WINSOCK_DEPRECATED_NO_WARNINGS', '/Zi', '/FS', '/Zc:inline', '/MT',
+                            //'/GS', '/TP', '/W3', '/Gm-', '/O2', '/Ob2', '/fp:precise', '/DNDEBUG', '/WX-' ,'/Zc:forScope' , '/GR', '/Gd', '/Oy-']
+def windowsReleaseCompilerArgs = []//['/O2']
+def windowsDebugLinkerArgs = []//['/DEBUG']
 
 def linuxCompilerArgs = ['-std=c++11', '-Wformat=2', '-Wall', '-Wextra', '-Werror', '-pedantic', '-Wno-psabi', '-g',
                          '-Wno-unused-parameter', '-fPIC', '-rdynamic', '-Wno-error=deprecated-declarations', '-pthread']
@@ -39,12 +44,15 @@ def macPlatformDetect = { config->
     return OperatingSystem.current().isMacOsX()
 }
 
+//def windowsLinkerArgs = [ '/MACHINE:X86', '/NXCOMPAT', 'kernel32.lib', 'user32.lib', 'gdi32.lib', 'winspool.lib', 'shell32.lib', 'ole32.lib', 'oleaut32.lib', 'uuid.lib', 'comdlg32.lib', 'advapi32.lib', '/DYNAMICBASE', 'libucrt.lib', 'libcmt.lib', 'libvcruntime.lib', 'LIBCPMT.LIB', '/SAFESEH' ]
+
 model {
     buildConfigs {
         winX86(BuildConfig) {
             architecture = 'x86'
             operatingSystem = 'windows'
             compilerArgs = windowsCompilerArgs
+            //linkerArgs = windowsLinkerArgs
             debugLinkerArgs = windowsDebugLinkerArgs
             releaseCompilerArgs = windowsReleaseCompilerArgs
             crossCompile = false
@@ -107,6 +115,7 @@ model {
             compilerFamily = 'Clang'
             detectPlatform = macPlatformDetect
         }
+        /*
         roboRio(BuildConfig) {
             architecture = 'athena'
             operatingSystem = 'linux'
@@ -120,6 +129,7 @@ model {
             compilerFamily = 'Gcc'
             exclude << 'gmock'
         }
+        */
         raspbian(BuildConfig) {
             architecture = 'raspbian'
             operatingSystem = 'linux'
