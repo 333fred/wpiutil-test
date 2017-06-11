@@ -114,7 +114,6 @@ model {
             compilerFamily = 'Clang'
             detectPlatform = macPlatformDetect
         }
-        /*
         roboRio(BuildConfig) {
             architecture = 'athena'
             operatingSystem = 'linux'
@@ -128,7 +127,6 @@ model {
             compilerFamily = 'Gcc'
             exclude << 'gmock'
         }
-        */
         raspbian(BuildConfig) {
             architecture = 'raspbian'
             operatingSystem = 'linux'
