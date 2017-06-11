@@ -1,12 +1,8 @@
 import edu.wpi.first.nativeutils.*
 import org.gradle.internal.os.OperatingSystem
 
-
- //[ '/Zi', '/W3', '/WX-', '/O2', '/Ob2', '/Oy-', '/D WIN32', '/D NOMINMAX', '/D _SCL_SECURE_NO_WARNINGS', '/D _WINSOCK_DEPRECATED_NO_WARNINGS', '/D _WINDLL', '/D _MBCS', '/Gm-', '/EHsc', '/MT', '/GS', '/fp:precise', '/Zc:wchar_t', '/Zc:forScope', '/Zc:inline', '/GR', '/Gd', '/TP', '/analyze-', '/errorReport:prompt', '/FS']
-
-
-
-def windowsCompilerArgs = ['/EHsc', '/DNOMINMAX', '/D_SCL_SECURE_NO_WARNINGS', '/D_WINSOCK_DEPRECATED_NO_WARNINGS', '/Zi', '/FS', '/Zc:inline', '/MT']
+def windowsCompilerArgs = ['/EHsc', '/DNOMINMAX', '/D_SCL_SECURE_NO_WARNINGS', '/D_WINSOCK_DEPRECATED_NO_WARNINGS',
+                           '/Zi', '/FS', '/Zc:inline', '/MT']
 def windowsReleaseCompilerArgs = ['/O2']
 def windowsDebugLinkerArgs = ['/DEBUG']
 
@@ -43,18 +39,14 @@ def macPlatformDetect = { config->
     return OperatingSystem.current().isMacOsX()
 }
 
-//def windowsLinkerArgs = [ '/MACHINE:X86', '/NXCOMPAT', 'kernel32.lib', 'user32.lib', 'gdi32.lib', 'winspool.lib', 'shell32.lib', 'ole32.lib', 'oleaut32.lib', 'uuid.lib', 'comdlg32.lib', 'advapi32.lib', '/DYNAMICBASE', 'libucrt.lib', 'libcmt.lib', 'libvcruntime.lib', 'LIBCPMT.LIB', '/SAFESEH' ]
-
 model {
     buildConfigs {
         winX86(BuildConfig) {
             architecture = 'x86'
             operatingSystem = 'windows'
             compilerArgs = windowsCompilerArgs
-            //linkerArgs = windowsLinkerArgs
             debugLinkerArgs = windowsDebugLinkerArgs
             releaseCompilerArgs = windowsReleaseCompilerArgs
-            crossCompile = false
             compilerFamily = 'VisualCpp'
             detectPlatform = windowsPlatformDetect
         }
@@ -64,7 +56,6 @@ model {
             compilerArgs = windowsCompilerArgs
             debugLinkerArgs = windowsDebugLinkerArgs
             releaseCompilerArgs = windowsReleaseCompilerArgs
-            crossCompile = false
             compilerFamily = 'VisualCpp'
             detectPlatform = windowsPlatformDetect
         }
@@ -77,7 +68,6 @@ model {
             linkerArgs << linux32BitArg
             debugCompilerArgs = linuxDebugCompilerArgs
             releaseCompilerArgs = linuxReleaseCompilerArgs
-            crossCompile = false
             compilerFamily = 'Gcc'
             detectPlatform = linuxIntelPlatformDetect
         }
@@ -88,7 +78,6 @@ model {
             linkerArgs = linuxLinkerArgs
             debugCompilerArgs = linuxDebugCompilerArgs
             releaseCompilerArgs = linuxReleaseCompilerArgs
-            crossCompile = false
             compilerFamily = 'Gcc'
             detectPlatform = linuxIntelPlatformDetect
         }
@@ -100,7 +89,6 @@ model {
             linkerArgs << mac32BitArg
             debugCompilerArgs = macDebugCompilerArgs
             releaseCompilerArgs = macReleaseCompilerArgs
-            crossCompile = false
             compilerFamily = 'Clang'
             detectPlatform = macPlatformDetect
         }
@@ -110,11 +98,10 @@ model {
             compilerArgs = macCompilerArgs
             debugCompilerArgs = macDebugCompilerArgs
             releaseCompilerArgs = macReleaseCompilerArgs
-            crossCompile = false
             compilerFamily = 'Clang'
             detectPlatform = macPlatformDetect
         }
-        roboRio(BuildConfig) {
+        roboRio(CrossBuildConfig) {
             architecture = 'athena'
             operatingSystem = 'linux'
             toolChainPrefix = 'arm-frc-linux-gnueabi-'
@@ -123,11 +110,10 @@ model {
             debugCompilerArgs = linuxDebugCompilerArgs
             releaseCompilerArgs = linuxReleaseCompilerArgs
             releaseStripBinaries = true
-            crossCompile = true
             compilerFamily = 'Gcc'
             exclude << 'gmock'
         }
-        raspbian(BuildConfig) {
+        raspbian(CrossBuildConfig) {
             architecture = 'raspbian'
             operatingSystem = 'linux'
             toolChainPrefix = 'arm-linux-gnueabi-'
@@ -135,11 +121,10 @@ model {
             linkerArgs = linuxLinkerArgs
             debugCompilerArgs = linuxDebugCompilerArgs
             releaseCompilerArgs = linuxReleaseCompilerArgs
-            crossCompile = true
             compilerFamily = 'Gcc'
             exclude << 'gmock'
         }
-        armhf(BuildConfig) {
+        armhf(CrossBuildConfig) {
             architecture = 'armhf'
             operatingSystem = 'linux'
             toolChainPrefix = 'arm-linux-gnueabi-'
@@ -147,11 +132,10 @@ model {
             linkerArgs = linuxLinkerArgs
             debugCompilerArgs = linuxDebugCompilerArgs
             releaseCompilerArgs = linuxReleaseCompilerArgs
-            crossCompile = true
             compilerFamily = 'Gcc'
             exclude << 'gmock'
         }
-        armv8(BuildConfig) {
+        armv8(CrossBuildConfig) {
             architecture = 'armv8'
             operatingSystem = 'linux'
             toolChainPrefix = 'aarch-linux-gnu-'
@@ -159,20 +143,8 @@ model {
             linkerArgs = linuxLinkerArgs
             debugCompilerArgs = linuxDebugCompilerArgs
             releaseCompilerArgs = linuxReleaseCompilerArgs
-            crossCompile = true
             compilerFamily = 'Gcc'
             exclude << 'gmock'
-        }
-        raspbianNative(BuildConfig) {
-            architecture = 'raspbian'
-            operatingSystem = 'linux'
-            compilerArgs = linuxCompilerArgs
-            linkerArgs = linuxLinkerArgs
-            debugCompilerArgs = linuxDebugCompilerArgs
-            releaseCompilerArgs = linuxReleaseCompilerArgs
-            crossCompile = false
-            compilerFamily = 'Gcc'
-            detectPlatform = linuxArmPlatformDetect
         }
         linuxArm(BuildConfig) {
             architecture = 'arm'
@@ -181,8 +153,6 @@ model {
             linkerArgs = linuxLinkerArgs
             debugCompilerArgs = linuxDebugCompilerArgs
             releaseCompilerArgs = linuxReleaseCompilerArgs
-            crossCompile = false
-            isArm = true
             compilerFamily = 'Gcc'
             detectPlatform = linuxArmPlatformDetect
         }
