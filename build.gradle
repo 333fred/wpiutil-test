@@ -40,6 +40,15 @@ model {
     components {
         wpiutil(NativeLibrarySpec) {
         }
+        if (!project.hasProperty('skipTestExe')) {
+            wpiutilExe(NativeExecutableSpec) {
+                sources {
+                    cpp {
+                        lib library: "wpiutil"
+                    }
+                }
+            }
+        }
     }
     binaries {
         withType(GoogleTestTestSuiteBinarySpec) {
