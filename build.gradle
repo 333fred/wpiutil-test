@@ -11,6 +11,12 @@ buildscript {
     }
 }
 
+// TODO: Figure out why the plugins don't work
+//plugins {
+    //id 'gradle.plugin.edu.wpi.first.wpilib.versioning.wpilib-version-plugin'
+    //id 'edu.wpi.first.native-utils'
+//}
+
 apply plugin: 'cpp'
 apply plugin: 'google-test'
 apply plugin: 'visual-studio'
@@ -97,3 +103,7 @@ artifacts {
 }
 
 apply from: 'publish.gradle'
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.5'
+}
