@@ -25,11 +25,11 @@ apply from: 'config.gradle'
 
 model {
     exportsConfigs {
-        wpiutil(ExportsConfig) { 
-            x86ExcludeSymbols = [ '_CT??_R0?AV_System_error', '_CT??_R0?AVexception', '_CT??_R0?AVfailure', 
+        wpiutil(ExportsConfig) {
+            x86ExcludeSymbols = [ '_CT??_R0?AV_System_error', '_CT??_R0?AVexception', '_CT??_R0?AVfailure',
                                   '_CT??_R0?AVruntime_error', '_CT??_R0?AVsystem_error', '_CTA5?AVfailure',
                                   '_TI5?AVfailure' ]
-            x64ExcludeSymbols = [ '_CT??_R0?AV_System_error', '_CT??_R0?AVexception', '_CT??_R0?AVfailure', 
+            x64ExcludeSymbols = [ '_CT??_R0?AV_System_error', '_CT??_R0?AVexception', '_CT??_R0?AVfailure',
                                   '_CT??_R0?AVruntime_error', '_CT??_R0?AVsystem_error', '_CTA5?AVfailure',
                                   '_TI5?AVfailure' ]
         }
@@ -52,6 +52,9 @@ model {
     }
     binaries {
         withType(GoogleTestTestSuiteBinarySpec) {
+            if(it.component.name == 'wpiutilExeTest') {
+                it.buildable = false
+            }
             lib project: ':gmock', library: 'gmock', linkage: 'static'
             lib library: 'wpiutil', linkage: 'shared'
         }

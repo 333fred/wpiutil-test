@@ -47,9 +47,9 @@ public class RuntimeDetector {
       } else if (isRaspbian()) {
         filePath = "/linux/raspbian/";
       } else if (isArmV7()) {
-        filePath = "/linux/armv7/";
+        filePath = "/linux/armhf/";
       } else if (isAarch64()) {
-        filePath = "/linux/aarch64/";
+        filePath = "/linux/aarch/";
       } else {
         filePath = "/linux/arm/";
       }

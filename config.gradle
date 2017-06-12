@@ -70,6 +70,7 @@ model {
             releaseCompilerArgs = linuxReleaseCompilerArgs
             compilerFamily = 'Gcc'
             detectPlatform = linuxIntelPlatformDetect
+            skipTests = true
         }
         linuxX64(BuildConfig) {
             architecture = 'x86-64'
@@ -116,7 +117,7 @@ model {
         raspbian(CrossBuildConfig) {
             architecture = 'raspbian'
             operatingSystem = 'linux'
-            toolChainPrefix = 'arm-linux-gnueabi-'
+            toolChainPrefix = 'arm-linux-gnueabihf-'
             compilerArgs = linuxCompilerArgs
             linkerArgs = linuxLinkerArgs
             debugCompilerArgs = linuxDebugCompilerArgs
@@ -127,7 +128,7 @@ model {
         armhf(CrossBuildConfig) {
             architecture = 'armhf'
             operatingSystem = 'linux'
-            toolChainPrefix = 'arm-linux-gnueabi-'
+            toolChainPrefix = 'arm-linux-gnueabihf-'
             compilerArgs = linuxCompilerArgs
             linkerArgs = linuxLinkerArgs
             debugCompilerArgs = linuxDebugCompilerArgs
@@ -135,8 +136,8 @@ model {
             compilerFamily = 'Gcc'
             exclude << 'gmock'
         }
-        armv8(CrossBuildConfig) {
-            architecture = 'armv8'
+        aarch(CrossBuildConfig) {
+            architecture = 'aarch'
             operatingSystem = 'linux'
             toolChainPrefix = 'aarch-linux-gnu-'
             compilerArgs = linuxCompilerArgs
