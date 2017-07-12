@@ -89,6 +89,26 @@ def mac32PlatformDetect = { config->
     }
 }
 
+if (!project.hasProperty('skipAthena')) {
+    model {
+        buildConfigs {
+                    roboRio(CrossBuildConfig) {
+                architecture = 'athena'
+                operatingSystem = 'linux'
+                toolChainPrefix = 'arm-frc-linux-gnueabi-'
+                compilerArgs = linuxCompilerArgs
+                linkerArgs = linuxLinkerArgs
+                debugCompilerArgs = linuxDebugCompilerArgs
+                releaseCompilerArgs = linuxReleaseCompilerArgs
+                releaseStripBinaries = true
+                compilerFamily = 'Gcc'
+                exclude << 'gmock'
+                exclude << 'wpiutilTestingBase'
+            }
+        }
+    }
+}
+
 model {
     buildConfigs {
         winX86(BuildConfig) {
@@ -150,19 +170,6 @@ model {
             releaseCompilerArgs = macReleaseCompilerArgs
             compilerFamily = 'Clang'
             detectPlatform = mac64PlatformDetect
-        }
-        roboRio(CrossBuildConfig) {
-            architecture = 'athena'
-            operatingSystem = 'linux'
-            toolChainPrefix = 'arm-frc-linux-gnueabi-'
-            compilerArgs = linuxCompilerArgs
-            linkerArgs = linuxLinkerArgs
-            debugCompilerArgs = linuxDebugCompilerArgs
-            releaseCompilerArgs = linuxReleaseCompilerArgs
-            releaseStripBinaries = true
-            compilerFamily = 'Gcc'
-            exclude << 'gmock'
-            exclude << 'wpiutilTestingBase'
         }
         raspbian(CrossBuildConfig) {
             architecture = 'raspbian'
