@@ -44,8 +44,7 @@ model {
 
 model {
     components {
-        wpiutil(NativeLibrarySpec) {
-        }
+        wpiutil(NativeLibrarySpec) { }
         if (!project.hasProperty('skipTestExe')) {
             wpiutilExe(NativeExecutableSpec) {
                 sources {
@@ -55,14 +54,16 @@ model {
                 }
             }
         }
+        wpiutilTestingBase(NativeLibrarySpec) { }
     }
     binaries {
         withType(GoogleTestTestSuiteBinarySpec) {
-            if(it.component.name == 'wpiutilExeTest') {
+            if (it.component.testedComponent.name.contains('TestingBase')) {
+                lib project: ':gmock', library: 'gmock', linkage: 'static'
+                lib library: 'wpiutil', linkage: 'shared'
+            } else {
                 it.buildable = false
             }
-            lib project: ':gmock', library: 'gmock', linkage: 'static'
-            lib library: 'wpiutil', linkage: 'shared'
         }
     }
 }

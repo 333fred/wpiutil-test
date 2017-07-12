@@ -19,14 +19,48 @@ def macReleaseCompilerArgs = ['-O2']
 def macDebugCompilerArgs = ['-O0']
 def mac32BitArg = '-m32'
 
-def windowsPlatformDetect = { config->
-    return OperatingSystem.current().isWindows()
+def buildAll = project.hasProperty('buildAll')
+
+def windows64PlatformDetect = { config->
+    def arch = System.getProperty("os.arch")
+    def isWin = OperatingSystem.current().isWindows()
+    if (buildAll) {
+        return isWin
+    } else {
+        return isWin && arch == 'amd64'
+    }
 }
 
-def linuxIntelPlatformDetect = { config->
+def windows32PlatformDetect = { config->
     def arch = System.getProperty("os.arch")
+    def isWin = OperatingSystem.current().isWindows()
+    if (buildAll) {
+        return isWin
+    } else {
+        return isWin && arch == 'x86'
+    }
+}
+
+def linux32IntelPlatformDetect = { config->
+    def arch = System.getProperty("os.arch")
+    def isLinux = OperatingSystem.current().isLinux()
     def isIntel = (arch == 'amd64' || arch == 'i386')
-    return OperatingSystem.current().isLinux() && isIntel
+    if (buildAll) {
+        return isLinux && isIntel
+    } else {
+        return isLinux && arch == 'i386'
+    }
+}
+
+def linux64IntelPlatformDetect = { config->
+    def arch = System.getProperty("os.arch")
+    def isLinux = OperatingSystem.current().isLinux()
+    def isIntel = (arch == 'amd64' || arch == 'i386')
+    if (buildAll) {
+        return isLinux && isIntel
+    } else {
+        return isLinux && arch == 'amd64'
+    }
 }
 
 def linuxArmPlatformDetect = { config->
@@ -35,8 +69,24 @@ def linuxArmPlatformDetect = { config->
     return OperatingSystem.current().isLinux() && !isIntel
 }
 
-def macPlatformDetect = { config->
-    return OperatingSystem.current().isMacOsX()
+def mac64PlatformDetect = { config->
+    def arch = System.getProperty("os.arch")
+    def isMac = OperatingSystem.current().isMacOsX()
+    if (buildAll) {
+        return isMac
+    } else {
+        return isMac && arch == 'amd64'
+    }
+}
+
+def mac32PlatformDetect = { config->
+    def arch = System.getProperty("os.arch")
+    def isMac = OperatingSystem.current().isMacOsX()
+    if (buildAll) {
+        return isMac
+    } else {
+        return isMac && arch == 'x86'
+    }
 }
 
 model {
@@ -48,7 +98,7 @@ model {
             linkerArgs = windowsLinkerArgs
             releaseCompilerArgs = windowsReleaseCompilerArgs
             compilerFamily = 'VisualCpp'
-            detectPlatform = windowsPlatformDetect
+            detectPlatform = windows32PlatformDetect
         }
         winX64(BuildConfig) {
             architecture = 'x86-64'
@@ -57,7 +107,7 @@ model {
             linkerArgs = windowsLinkerArgs
             releaseCompilerArgs = windowsReleaseCompilerArgs
             compilerFamily = 'VisualCpp'
-            detectPlatform = windowsPlatformDetect
+            detectPlatform = windows64PlatformDetect
         }
         linuxX86(BuildConfig) {
             architecture = 'x86'
@@ -69,8 +119,7 @@ model {
             debugCompilerArgs = linuxDebugCompilerArgs
             releaseCompilerArgs = linuxReleaseCompilerArgs
             compilerFamily = 'Gcc'
-            detectPlatform = linuxIntelPlatformDetect
-            skipTests = true
+            detectPlatform = linux32IntelPlatformDetect
         }
         linuxX64(BuildConfig) {
             architecture = 'x86-64'
@@ -80,7 +129,7 @@ model {
             debugCompilerArgs = linuxDebugCompilerArgs
             releaseCompilerArgs = linuxReleaseCompilerArgs
             compilerFamily = 'Gcc'
-            detectPlatform = linuxIntelPlatformDetect
+            detectPlatform = linux64IntelPlatformDetect
         }
         macX86(BuildConfig) {
             architecture = 'x86'
@@ -91,7 +140,7 @@ model {
             debugCompilerArgs = macDebugCompilerArgs
             releaseCompilerArgs = macReleaseCompilerArgs
             compilerFamily = 'Clang'
-            detectPlatform = macPlatformDetect
+            detectPlatform = mac32PlatformDetect
         }
         macX64(BuildConfig) {
             architecture = 'x86-64'
@@ -100,7 +149,7 @@ model {
             debugCompilerArgs = macDebugCompilerArgs
             releaseCompilerArgs = macReleaseCompilerArgs
             compilerFamily = 'Clang'
-            detectPlatform = macPlatformDetect
+            detectPlatform = mac64PlatformDetect
         }
         roboRio(CrossBuildConfig) {
             architecture = 'athena'
@@ -113,6 +162,7 @@ model {
             releaseStripBinaries = true
             compilerFamily = 'Gcc'
             exclude << 'gmock'
+            exclude << 'wpiutilTestingBase'
         }
         raspbian(CrossBuildConfig) {
             architecture = 'raspbian'
@@ -122,6 +172,7 @@ model {
             linkerArgs = linuxLinkerArgs
             debugCompilerArgs = linuxDebugCompilerArgs
             releaseCompilerArgs = linuxReleaseCompilerArgs
+            skipByDefault = true
             compilerFamily = 'Gcc'
             exclude << 'gmock'
         }
@@ -133,6 +184,7 @@ model {
             linkerArgs = linuxLinkerArgs
             debugCompilerArgs = linuxDebugCompilerArgs
             releaseCompilerArgs = linuxReleaseCompilerArgs
+            skipByDefault = true
             compilerFamily = 'Gcc'
             exclude << 'gmock'
         }
@@ -144,6 +196,7 @@ model {
             linkerArgs = linuxLinkerArgs
             debugCompilerArgs = linuxDebugCompilerArgs
             releaseCompilerArgs = linuxReleaseCompilerArgs
+            skipByDefault = true
             compilerFamily = 'Gcc'
             exclude << 'gmock'
         }
