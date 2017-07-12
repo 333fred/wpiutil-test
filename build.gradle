@@ -21,7 +21,6 @@ apply plugin: 'cpp'
 apply plugin: 'google-test'
 apply plugin: 'visual-studio'
 apply plugin: 'edu.wpi.first.native-utils'
-
 apply plugin: 'edu.wpi.first.dependency-utils'
 apply plugin: 'edu.wpi.first.publish-utils'
 apply plugin: 'edu.wpi.first.exports-utils'
@@ -44,17 +43,44 @@ model {
 
 model {
     components {
-        wpiutil(NativeLibrarySpec) { }
+        wpiutil(NativeLibrarySpec) {
+            sources {
+                cpp {
+                    source {
+                        srcDirs 'src/main/native/cpp'
+                        include '**/*.cpp'
+                    }
+                    exportedHeaders {
+                        srcDirs 'src/main/native/include'
+                    }
+                }
+            }
+         }
         if (!project.hasProperty('skipTestExe')) {
             wpiutilExe(NativeExecutableSpec) {
                 sources {
                     cpp {
-                        lib library: "wpiutil"
+                        source {
+                            srcDirs 'src/dev/native/cpp'
+                            include '**/*.cpp'
+                            lib library: "wpiutil"
+                        }
+                        exportedHeaders {
+                            srcDirs 'src/dev/native/include'
+                        }
                     }
                 }
             }
         }
         wpiutilTestingBase(NativeLibrarySpec) { }
+    }
+    testSuites {
+        wpiutilTestingBaseTest {
+            sources {
+                cpp.source.srcDir '/src/test/native/cpp'
+                cpp.exportedHeaders.srcDir '/src/test/native/include'
+            }
+        }
     }
     binaries {
         withType(GoogleTestTestSuiteBinarySpec) {
@@ -72,7 +98,7 @@ task cppSourcesZip(type: Zip) {
     destinationDir = project.buildDir
     classifier = "sources"
 
-    from('src/wpiutil/cpp') {
+    from('src/main/native/cpp') {
         into '/'
     }
 }
@@ -81,7 +107,7 @@ task cppHeadersZip(type: Zip) {
     destinationDir = project.buildDir
     classifier = "headers"
 
-    from('src/wpiutil/headers') {
+    from('src/main/native/include') {
         into '/'
     }
 }
