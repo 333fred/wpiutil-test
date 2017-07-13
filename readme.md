@@ -33,3 +33,41 @@ In addition, more platforms can be built. For instance, with additional cross co
 ```
 
 If you are building the native version on a 64 bit Linux computer, use a GCC installation which has multilib support enabled (it can compile both 32 and 64 bit programs). The package providing that support on most Linux distributions is called `gcc-multilib`.
+
+By default, debug binaries of the libraries will be built. To switch to instead build release binaries, use the following flag
+
+```bash
+-PreleaseBuild
+```
+
+### Custom Cross Compilers
+Coming soon
+
+### Testing
+By default, tests will be built for any native platform, and will be run during any execution of the `build` or `publish` tasks. To skip building and running the tests, use the `-PskipAllTests` command line flag.
+
+### Publishing
+to use wpiutil in downstream projects as a Maven-style dependency, use the `publish` command. This will publish the following artifact id's:
+
+- edu.wpi.first.wpiutil:wpiutil-cpp
+- edu.wpi.first.wpiutil:wpiutil-java
+
+The `wpiutil-cpp` artifact will contain the following 2 classifiers:
+
+- `headers` (contains C++ headers)
+- `sources` (contains C++ sources)
+
+In addition, a classifier will be created for each binary built by the current build. The internal layout of the artifacts will be as follows.
+
+- `/os/arch/shared/` (shared binaries located here)
+- `/os/arch/static/` (static binaries located here)
+
+The `wpiutil-java` artifact will contain a jar with no classifiers. This is the java jar file. In addition, the following 2 classifiers will be contained
+
+- `sources` (contains Java sources)
+- `javadoc` (contains Javadoc sources)
+
+All of these artifacts by default are published to `~/releases/maven/development`. To switch to the release repository (`~/release/maven/release`), use the flag `-PreleaseType=OFFICIAL`.
+
+All downstream projects are configured to use the individual classifier artifacts. The previouse `desktop` classifier does not exist anymore. 
+
