@@ -23,6 +23,10 @@ apply plugin: 'java'
 apply from: 'config.gradle'
 
 model {
+    // Exports config is a utility to enable exporting all symbols in a C++ library on windows to a DLL.
+    // This removes the need for DllExport on a library. However, the gradle C++ builder has a bug
+    // where some extra symbols are added that cannot be resolved at link time. This configuration
+    // lets you specify specific symbols to exlude from exporting.
     exportsConfigs {
         wpiutil(ExportsConfig) {
             x86ExcludeSymbols = [ '_CT??_R0?AV_System_error', '_CT??_R0?AVexception', '_CT??_R0?AVfailure',
@@ -46,9 +50,11 @@ model {
                     }
                 }
             }
-         }
-        if (!project.hasProperty('skipTestExe')) {
-            wpiutilExe(NativeExecutableSpec) {
+        }
+        // By default, a development executable will be generated. This is to help the case of 
+        // testing specific functionality of the library.
+        if (!project.hasProperty('skipDevExe')) {
+            wpiutilDev(NativeExecutableSpec) {
                 sources {
                     cpp {
                         source {
@@ -63,6 +69,10 @@ model {
                 }
             }
         }
+        // The TestingBase library is a workaround for an issue with the GoogleTest plugin.
+        // The plugin by default will rebuild the entire test source set, which increases
+        // build time. By testing an empty library, and then just linking the already built component
+        // into the test, we save the extra build
         wpiutilTestingBase(NativeLibrarySpec) { }
     }
     testSuites {

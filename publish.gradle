@@ -32,7 +32,7 @@ model {
   publishingConfigs {
         cpp(PublishingConfig) {
             extraPublishingTasks = [ cppHeadersZip, cppSourcesZip ]
-            excludeComponents = [ 'wpiutilExe', 'wpiutilTestingBase' ]
+            includeComponents = [ 'wpiutil' ]
             isNative = true
             artifactId = "${baseArtifactId}-cpp"
             groupId = artifactGroupId
