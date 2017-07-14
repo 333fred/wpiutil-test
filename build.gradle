@@ -1,3 +1,5 @@
+import edu.wpi.first.nativeutils.NativeUtils
+
 buildscript {
     repositories {
         mavenLocal()
@@ -11,14 +13,23 @@ buildscript {
     }
 }
 
+ext.getClassifier = { binary->
+    return NativeUtils.getClassifier(binary)
+}
+
+ext.getPlatformPath = { binary->
+    return NativeUtils.getPlatformPath(binary)
+}
+
 apply plugin: 'cpp'
 apply plugin: 'google-test'
 apply plugin: 'visual-studio'
 apply plugin: 'edu.wpi.first.native-utils'
 apply plugin: 'edu.wpi.first.dependency-utils'
-apply plugin: 'edu.wpi.first.publish-utils'
 apply plugin: 'edu.wpi.first.exports-utils'
 apply plugin: 'java'
+apply plugin: 'maven-publish'
+apply plugin: 'edu.wpi.first.wpilib.versioning.WPILibVersioningPlugin'
 
 apply from: 'config.gradle'
 
@@ -95,42 +106,8 @@ model {
     }
 }
 
-task cppSourcesZip(type: Zip) {
-    destinationDir = project.buildDir
-    classifier = "sources"
-
-    from('src/main/native/cpp') {
-        into '/'
-    }
-}
-
-task cppHeadersZip(type: Zip) {
-    destinationDir = project.buildDir
-    classifier = "headers"
-
-    from('src/main/native/include') {
-        into '/'
-    }
-}
-
-task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier = 'sources'
-    from sourceSets.main.allSource
-}
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
-}
-
-artifacts {
-    archives sourcesJar
-    archives javadocJar
-    archives cppHeadersZip
-    archives cppSourcesZip
-}
-
 apply from: 'publish.gradle'
+apply from: 'zips.gradle'
 
 task wrapper(type: Wrapper) {
     gradleVersion = '4.0.1'

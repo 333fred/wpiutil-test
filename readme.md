@@ -5,13 +5,13 @@ wpiutil is a utility library designed for making C++ interfacing easier.
 ## Build Requirements
 To build wpiutil, a few requirements must be met:
 
-- Platform Native Toolchain - You must have a toolchain for your native platform installed if you wish to build ntcore for your machine. On Windows, this is Visual Studio. On Mac, this is Clang, and on Linux, this is GCC. Your toolchain must support the `-std=c++11` language flag.
-- Platform Native JDK - In order to compile ntcore your native platform, you must have the JDK for your platform installed, so that the correct JNI headers can be included.
-- ARM Toolchain - To crosscompile ntcore for the roboRIO, you must have the FRC ARM toolchain installed, which can be found [here](http://first.wpi.edu/FRC/roborio/toolchains/).
+- Platform Native Toolchain - You must have a toolchain for your native platform installed if you wish to build wpiutil for your machine. On Windows, this is Visual Studio. On Mac, this is Clang, and on Linux, this is GCC. Your toolchain must support the `-std=c++11` language flag.
+- Platform Native JDK - In order to compile wpiutil your native platform, you must have the JDK for your platform installed, so that the correct JNI headers can be included.
+- ARM Toolchain - To crosscompile wpiutil for the roboRIO, you must have the FRC ARM toolchain installed, which can be found [here](http://first.wpi.edu/FRC/roborio/toolchains/).
 - Cross Toolchains (coming soon)
 
 ## Building
-Gradle is the main build system used by ntcore. All tasks are run with the `gradlew` wrapper, which is included in the root of the repository. All targets that can be accomplished by Gradle are referred to as tasks. The main task available is `build`. To run Gradle, cd into the build directory and run:
+Gradle is the main build system used by wpiutil. All tasks are run with the `gradlew` wrapper, which is included in the root of the repository. All targets that can be accomplished by Gradle are referred to as tasks. The main task available is `build`. To run Gradle, cd into the build directory and run:
 
 ```bash
 ./gradlew build

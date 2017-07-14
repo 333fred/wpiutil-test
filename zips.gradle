@@ -1,0 +1,122 @@
+ext.licenseFile = new File("$rootDir/license.txt")
+
+task cppSourcesZip(type: Zip) {
+    destinationDir = project.buildDir
+    classifier = "sources"
+
+    from(licenseFile) {
+        into '/'
+    }
+
+    from('src/main/native/cpp') {
+        into '/'
+    }
+}
+
+task cppHeadersZip(type: Zip) {
+    destinationDir = project.buildDir
+    classifier = "headers"
+
+    from(licenseFile) {
+        into '/'
+    }
+
+    from('src/main/native/include') {
+        into '/'
+    }
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+    archives cppHeadersZip
+    archives cppSourcesZip
+}
+
+
+def nativeTaskList = []
+
+model {
+    publishing {
+        def wpiutilConfigMap = [:]
+        $.components.each {
+            if (it in NativeLibrarySpec && it.name == 'wpiutil') { 
+                it.binaries.each {
+                    def target = getClassifier(it)
+                    if (wpiutilConfigMap.containsKey(target)) {
+                        wpiutilConfigMap.get(target).add(it)
+                    } else {
+                        wpiutilConfigMap.put(target, [])
+                        wpiutilConfigMap.get(target).add(it)
+                    }
+                }
+            }
+        }
+
+        wpiutilConfigMap.each { key, value ->
+            def base = "zipcppwpiutil"
+            def task = project.tasks.create(base + "-${key}", Zip) {
+                description = 'Creates platform zip of the libraries'
+                destinationDir =  project.buildDir
+                classifier = key
+                baseName = base
+                duplicatesStrategy = 'exclude'
+
+                from(licenseFile) {
+                    into '/'
+                }
+
+                value.each { binary->
+                    if (binary.buildable) {
+                        if (binary instanceof SharedLibraryBinarySpec) {
+                            dependsOn binary.buildTask
+                            from(new File(binary.sharedLibraryFile.absolutePath + ".debug")) {
+                                into getPlatformPath(binary) + '/shared'
+                            }
+                            from (binary.sharedLibraryFile) {
+                                into getPlatformPath(binary) + '/shared'
+                            }
+                            from (binary.sharedLibraryLinkFile) {
+                                into getPlatformPath(binary) + '/shared'
+                            }
+                        } else if (binary instanceof StaticLibraryBinarySpec) {
+                            dependsOn binary.buildTask
+                            from (binary.staticLibraryFile) {
+                                into getPlatformPath(binary) + '/static'
+                            }
+                        }
+                    }
+                }
+            } 
+            nativeTaskList.add(task)
+            project.artifacts {
+                task
+            }
+            
+            build.dependsOn task
+        }
+        publications {
+            cpp(MavenPublication) {
+                nativeTaskList.each {
+                    artifact it
+                }
+                artifact cppHeadersZip
+                artifact cppSourcesZip
+
+                artifactId = "${baseArtifactId}-cpp"
+                groupId artifactGroupId
+                version pubVersion
+            }
+        }
+    }
+}
