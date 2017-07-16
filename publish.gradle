@@ -1,3 +1,6 @@
+apply plugin: 'maven-publish'
+apply plugin: 'edu.wpi.first.wpilib.versioning.WPILibVersioningPlugin'
+
 def getVersion = {
     if (WPILibVersion.version.contains('-'))
         return WPILibVersion.version.substring(WPILibVersion.version.indexOf('-'))

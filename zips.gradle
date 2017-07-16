@@ -65,7 +65,7 @@ model {
 
         wpiutilConfigMap.each { key, value ->
             def base = "zipcppwpiutil"
-            def task = project.tasks.create(base + "-${key}", Zip) {
+            def task = project.tasks.create(base + "-${key}", Jar) {
                 description = 'Creates platform zip of the libraries'
                 destinationDir =  project.buildDir
                 classifier = key

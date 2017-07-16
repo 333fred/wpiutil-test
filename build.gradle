@@ -28,8 +28,6 @@ apply plugin: 'edu.wpi.first.native-utils'
 apply plugin: 'edu.wpi.first.dependency-utils'
 apply plugin: 'edu.wpi.first.exports-utils'
 apply plugin: 'java'
-apply plugin: 'maven-publish'
-apply plugin: 'edu.wpi.first.wpilib.versioning.WPILibVersioningPlugin'
 
 apply from: 'config.gradle'
 
