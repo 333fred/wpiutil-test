@@ -4,7 +4,8 @@ import org.gradle.internal.os.OperatingSystem
 def windowsCompilerArgs = ['/EHsc', '/DNOMINMAX', '/D_SCL_SECURE_NO_WARNINGS', '/D_WINSOCK_DEPRECATED_NO_WARNINGS',
                            '/Zi', '/FS', '/Zc:inline', '/MT']
 def windowsReleaseCompilerArgs = ['/O2']
-def windowsLinkerArgs = ['/DEBUG:FULL']
+def windowsLinkerArgs = [ '/DEBUG:FULL' ]
+def windowsReleaseLinkerArgs = [ '/OPT:REF', '/OPT:ICF' ]
 
 def linuxCompilerArgs = ['-std=c++11', '-Wformat=2', '-Wall', '-Wextra', '-Werror', '-pedantic', '-Wno-psabi', '-g',
                          '-Wno-unused-parameter', '-fPIC', '-rdynamic', '-Wno-error=deprecated-declarations', '-pthread']
@@ -92,7 +93,7 @@ def mac32PlatformDetect = { config->
 if (!project.hasProperty('skipAthena')) {
     model {
         buildConfigs {
-                    roboRio(CrossBuildConfig) {
+                roboRio(CrossBuildConfig) {
                 architecture = 'athena'
                 operatingSystem = 'linux'
                 toolChainPrefix = 'arm-frc-linux-gnueabi-'
@@ -118,6 +119,7 @@ if (!project.hasProperty('onlyAthena')) {
                 compilerArgs = windowsCompilerArgs
                 linkerArgs = windowsLinkerArgs
                 releaseCompilerArgs = windowsReleaseCompilerArgs
+                releaseLinkerArgs = windowsReleaseLinkerArgs
                 compilerFamily = 'VisualCpp'
                 detectPlatform = windows32PlatformDetect
             }
@@ -127,6 +129,7 @@ if (!project.hasProperty('onlyAthena')) {
                 compilerArgs = windowsCompilerArgs
                 linkerArgs = windowsLinkerArgs
                 releaseCompilerArgs = windowsReleaseCompilerArgs
+                releaseLinkerArgs = windowsReleaseLinkerArgs
                 compilerFamily = 'VisualCpp'
                 detectPlatform = windows64PlatformDetect
             }

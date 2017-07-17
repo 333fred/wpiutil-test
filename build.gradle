@@ -105,7 +105,6 @@ model {
 }
 
 apply from: 'publish.gradle'
-apply from: 'zips.gradle'
 
 task wrapper(type: Wrapper) {
     gradleVersion = '4.0.1'
