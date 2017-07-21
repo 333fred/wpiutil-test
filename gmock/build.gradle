@@ -3,7 +3,7 @@ import org.gradle.internal.os.OperatingSystem
 if (!project.hasProperty('onlyAthena')) {
     apply plugin: 'cpp'
     apply plugin: 'visual-studio'
-    apply plugin: 'edu.wpi.first.native-utils'
+    apply plugin: 'edu.wpi.first.nativeutils.NativeUtils'
 
     ext.gmockProject = true
 

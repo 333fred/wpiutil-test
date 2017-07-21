@@ -8,7 +8,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'edu.wpi.first:native-utils:0.1-SNAPSHOT'
+        classpath 'gradle.plugin.edu.wpi.first:native-utils:0.1-beta'
         classpath 'gradle.plugin.edu.wpi.first.wpilib.versioning:wpilib-version-plugin:1.6'
     }
 }
@@ -24,9 +24,7 @@ ext.getPlatformPath = { binary->
 apply plugin: 'cpp'
 apply plugin: 'google-test'
 apply plugin: 'visual-studio'
-apply plugin: 'edu.wpi.first.native-utils'
-apply plugin: 'edu.wpi.first.dependency-utils'
-apply plugin: 'edu.wpi.first.exports-utils'
+apply plugin: 'edu.wpi.first.nativeutils.NativeUtils'
 apply plugin: 'java'
 
 apply from: 'config.gradle'

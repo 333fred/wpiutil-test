@@ -25,7 +25,9 @@ if (pubVersion == '') {
     pubVersion = '424242-SNAPSHOT'
 }
 
-def versionFile = file("$buildDir/version.txt")
+def outputsFolder = file("$buildDir/outputs")
+
+def versionFile = file("$outputsFolder/version.txt")
 
 task outputVersions() {
     description = 'Prints the versions of wpiutil to a file for use by the downstream packaging project'
@@ -33,7 +35,7 @@ task outputVersions() {
     outputs.files(versionFile)
 
     doFirst {
-        buildDir.mkdir()
+        outputsFolder.mkdir()
     }
 
     doLast {
@@ -49,7 +51,7 @@ def artifactGroupId = 'edu.wpi.first.wpiutil'
 def licenseFile = new File("$rootDir/license.txt")
 
 task cppSourcesZip(type: Zip) {
-    destinationDir = project.buildDir
+    destinationDir = outputsFolder
     classifier = "sources"
 
     from(licenseFile) {
@@ -62,7 +64,7 @@ task cppSourcesZip(type: Zip) {
 }
 
 task cppHeadersZip(type: Zip) {
-    destinationDir = project.buildDir
+    destinationDir = outputsFolder
     classifier = "headers"
 
     from(licenseFile) {
@@ -111,7 +113,7 @@ def createComponentZipTasks = { components, name, base, type, project, func ->
         def baseN = base + name
         def task = project.tasks.create(baseN + "-${key}", type) {
             description = 'Creates component archive for platform ' + key
-            destinationDir =  project.buildDir
+            destinationDir =  outputsFolder
             classifier = key
             baseName = baseN + '-classifier'
             duplicatesStrategy = 'exclude'
