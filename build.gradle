@@ -58,7 +58,7 @@ model {
                 }
             }
         }
-        // By default, a development executable will be generated. This is to help the case of 
+        // By default, a development executable will be generated. This is to help the case of
         // testing specific functionality of the library.
         if (!project.hasProperty('skipDevExe')) {
             wpiutilDev(NativeExecutableSpec) {
@@ -85,8 +85,8 @@ model {
     testSuites {
         wpiutilTestingBaseTest {
             sources {
-                cpp.source.srcDir '/src/test/native/cpp'
-                cpp.exportedHeaders.srcDir '/src/test/native/include'
+                cpp.source.srcDir 'src/test/native/cpp'
+                cpp.exportedHeaders.srcDir 'src/test/native/include'
             }
         }
     }
