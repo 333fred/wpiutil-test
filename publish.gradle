@@ -96,7 +96,7 @@ artifacts {
 def createComponentZipTasks = { components, name, base, type, project, func ->
     def configMap = [:]
     components.each {
-        if (it in NativeLibrarySpec && it.name == name) { 
+        if (it in NativeLibrarySpec && it.name == name) {
             it.binaries.each {
                 def target = getClassifier(it)
                 if (configMap.containsKey(target)) {
