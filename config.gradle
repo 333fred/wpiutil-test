@@ -76,7 +76,7 @@ def mac64PlatformDetect = { config->
     if (buildAll) {
         return isMac
     } else {
-        return isMac && arch == 'amd64'
+        return isMac && arch == 'x86_64'
     }
 }
 
