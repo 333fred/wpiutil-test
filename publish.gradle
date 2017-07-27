@@ -91,6 +91,9 @@ artifacts {
     archives javadocJar
     archives cppHeadersZip
     archives cppSourcesZip
+    outputVersions.outputs.files.each {
+        archives it
+    }
 }
 
 def createComponentZipTasks = { components, name, base, type, project, func ->
@@ -129,7 +132,7 @@ def createComponentZipTasks = { components, name, base, type, project, func ->
         project.build.dependsOn task
 
         project.artifacts {
-            task
+            archives task
         }
     }
     return taskList
@@ -176,7 +179,6 @@ model {
         }
     }
 }
-
 
 publishing {
   publications {
